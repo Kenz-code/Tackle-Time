@@ -1,12 +1,18 @@
-import 'package:fishing_calendar/presentation/main_page/main_page.dart';
+import 'package:tackle_time/domain/onboarding_check.dart';
+import 'package:tackle_time/utils/services/onboarding_service.dart';
+import 'package:tackle_time/presentation/main_page/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
   
-  void onGetStarted(BuildContext context) {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
+  void onGetStarted(BuildContext context) async {
+    await OnboardingService().markOnboardingSeen();
+
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingCheck()));
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,11 @@ class OnboardingPage extends StatelessWidget {
 
               SizedBox(height: 16,),
 
-              Image.asset(
-                "assets/Fisherman.png",
+              Expanded(
+                child: Image.asset(
+                  "assets/Fisherman.png",
+                  fit: BoxFit.cover,
+                ),
               ),
 
               SizedBox(height: 16,),
@@ -34,7 +43,7 @@ class OnboardingPage extends StatelessWidget {
 
               Text("Plan your perfect fishing trip with our daily fishing calendar—discover the best times to cast your line and reel in the big catch!", textAlign: TextAlign.center,),
 
-              Spacer(),
+              SizedBox(height: 48,),
 
               Row(
                 children: [

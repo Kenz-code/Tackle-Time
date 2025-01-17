@@ -1,10 +1,21 @@
-import 'package:fishing_calendar/presentation/main_page/main_page.dart';
-import 'package:fishing_calendar/presentation/onboarding/onboarding_page.dart';
-import 'package:fishing_calendar/utils/theme.dart';
+import 'package:tackle_time/domain/onboarding_check.dart';
+import 'package:tackle_time/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:pwa_install/pwa_install.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  PWAInstall().setup(installCallback: () {
+    debugPrint('APP INSTALLED!');
+  });
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -17,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: AppTheme.theme,
       themeMode: ThemeMode.light,
-      home: OnboardingPage(),
+      home: OnboardingCheck(),
     );
   }
 }

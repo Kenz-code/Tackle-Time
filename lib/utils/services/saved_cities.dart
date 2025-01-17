@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:fishing_calendar/utils/services/city_reader.dart';
-import 'package:fishing_calendar/utils/services/json_convert.dart';
+import 'package:tackle_time/utils/services/city_reader.dart';
+import 'package:tackle_time/utils/services/json_convert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SavedCitiesManager {

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -39,14 +39,11 @@ class City {
 }
 
 // Parse GeoNames file (top-level function for use with compute)
-Future<List<City>> parseGeoNamesFile(List<dynamic> params) async {
-  final String filePath = params[0]; // File path (not used directly, will use the file instead)
-  final File file = params[1]; // File passed from main isolate
-
+List<City> parseGeoNamesData(String data) {
   final cities = <City>[];
 
-  // Read lines from the file
-  final lines = await file.readAsLines();
+  // Split the data into lines
+  final lines = const LineSplitter().convert(data);
 
   for (var line in lines) {
     final parts = line.split('\t'); // Tab-delimited
@@ -67,21 +64,11 @@ Future<List<City>> parseGeoNamesFile(List<dynamic> params) async {
   return cities;
 }
 
-// Function to call parseGeoNamesFile on a background thread
-Future<List<City>> loadCitiesCompute(String filePath) async {
-  final file = await loadAssetAsFile("assets/CA/CA.txt", "temp_CA.txt");
+// Function to load and parse the GeoNames file
+Future<List<City>> loadCitiesCompute(String assetPath) async {
+  // Load the file as a string from assets
+  final String data = await rootBundle.loadString(assetPath);
 
-  return await compute(parseGeoNamesFile, [filePath, file]);
-}
-
-Future<File> loadAssetAsFile(String assetPath, String tempFileName) async {
-  // Load the asset as ByteData
-  ByteData data = await rootBundle.load(assetPath);
-
-  // Write the ByteData to a temporary file
-  final tempDir = Directory.systemTemp;
-  final tempFile = File('${tempDir.path}/$tempFileName');
-  await tempFile.writeAsBytes(data.buffer.asUint8List(), flush: true);
-
-  return tempFile;
+  // Parse the data on a background thread
+  return await compute(parseGeoNamesData, data);
 }

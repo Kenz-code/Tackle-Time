@@ -1,4 +1,4 @@
-import 'package:fishing_calendar/utils/services/city_reader.dart';
+import 'package:tackle_time/utils/services/city_reader.dart';
 
 class CityDataSingleton {
   static final CityDataSingleton _instance = CityDataSingleton._internal();

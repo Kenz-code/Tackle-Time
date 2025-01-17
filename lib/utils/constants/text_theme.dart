@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fishing_calendar/utils/constants/open_color.dart';
+import 'package:tackle_time/utils/constants/open_color.dart';
 
 class AppTextTheme {
 

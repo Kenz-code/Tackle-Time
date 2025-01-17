@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:fishing_calendar/utils/constants/border_radius.dart";
-import "package:fishing_calendar/utils/constants/open_color.dart";
-import "package:fishing_calendar/utils/constants/text_theme.dart";
+import "package:tackle_time/utils/constants/border_radius.dart";
+import "package:tackle_time/utils/constants/open_color.dart";
+import "package:tackle_time/utils/constants/text_theme.dart";
 import "package:flutter/services.dart";
 
 /*
@@ -145,7 +145,14 @@ class AppAppBarTheme {
     backgroundColor: Colors.transparent,
     surfaceTintColor: OpenColor.gray50,
     centerTitle: true,
-    systemOverlayStyle: SystemUiOverlayStyle.dark,
+    systemOverlayStyle: SystemUiOverlayStyle(
+      // Status bar color
+      statusBarColor: Colors.transparent,
+
+      // Status bar brightness (optional)
+      statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+      statusBarBrightness: Brightness.light, // For iOS (dark icons)
+    ),
   );
 
 }

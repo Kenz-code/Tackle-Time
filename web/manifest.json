@@ -1,11 +1,11 @@
 {
-    "name": "fishing_calendar",
-    "short_name": "fishing_calendar",
+    "name": "Tackle Time",
+    "short_name": "Tackle Time",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#ffffff",
+    "theme_color": "#228be6",
+    "description": "A fishing calendar app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:ui' as ui;
-import 'package:fishing_calendar/logic/main_page/daily_fish_activity.dart';
-import 'package:fishing_calendar/logic/main_page/selected_data_manager.dart';
-import 'package:fishing_calendar/utils/services/city_reader.dart';
-import 'package:fishing_calendar/utils/services/moon_calc.dart';
+import 'package:tackle_time/logic/main_page/daily_fish_activity.dart';
+import 'package:tackle_time/logic/main_page/selected_data_manager.dart';
+import 'package:tackle_time/utils/services/city_reader.dart';
+import 'package:tackle_time/utils/services/moon_calc.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -14,7 +14,7 @@ class DailyActivitySection extends StatelessWidget {
 
   final City selectedCity;
 
-  final DateFormat formatter = DateFormat('HH:mm');
+  final DateFormat formatter = DateFormat.jm();
 
   @override
   Widget build(BuildContext context) {
@@ -212,13 +212,17 @@ class TimelineBarPainter extends CustomPainter {
       }
     }
 
-    // Draw hour labels (every 3rd hour)
+    // Draw hour labels (every 3rd hour) in 12-hour format
     for (int i = 0; i <= 24; i += 3) {
       double x = i * hourWidth;
 
+      int hour12 = i % 12;
+      String period = (i < 12 || i == 24) ? 'a' : 'p';
+      if (hour12 == 0) hour12 = 12;  // Adjust for 12 AM/PM
+
       TextSpan span = TextSpan(
         style: Theme.of(context).textTheme.bodyMedium,
-        text: '${i % 24}',
+        text: '$hour12',
       );
       TextPainter textPainter = TextPainter(
         text: span,
@@ -238,10 +242,14 @@ class TimelineBarPainter extends CustomPainter {
       currentTimePaint,
     );
 
-    // Draw the current time label
+    // Draw the current time label in 12-hour format
+    int currentHour12 = currentTime.hour % 12;
+    String currentPeriod = (currentTime.hour < 12 || currentTime.hour == 24) ? 'AM' : 'PM';
+    if (currentHour12 == 0) currentHour12 = 12;  // Adjust for 12 AM/PM
+
     TextSpan currentTimeSpan = TextSpan(
       style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
-      text: '${currentTime.hour}:${currentTime.minute.toString().padLeft(2, '0')}',
+      text: '$currentHour12:${currentTime.minute.toString().padLeft(2, '0')} $currentPeriod',
     );
     TextPainter currentTimePainter = TextPainter(
       text: currentTimeSpan,

@@ -1,5 +1,5 @@
-import 'package:fishing_calendar/logic/main_page/city_data_singleton.dart';
-import 'package:fishing_calendar/utils/services/city_reader.dart';
+import 'package:tackle_time/logic/main_page/city_data_singleton.dart';
+import 'package:tackle_time/utils/services/city_reader.dart';
 import 'package:flutter/material.dart';
 
 class CitySearchPage extends StatefulWidget {

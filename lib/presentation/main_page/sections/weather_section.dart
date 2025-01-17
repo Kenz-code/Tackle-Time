@@ -1,8 +1,15 @@
-import 'package:fishing_calendar/logic/main_page/selected_data_manager.dart';
+import 'package:tackle_time/logic/main_page/selected_data_manager.dart';
+import 'package:tackle_time/utils/services/settings/settings_service.dart';
+import 'package:tackle_time/utils/services/unit_converter/unit_converter.dart';
+import 'package:tackle_time/utils/services/unit_converter/unit_enums.dart';
 import 'package:flutter/material.dart';
 
 class WeatherSection extends StatelessWidget {
-  const WeatherSection({super.key});
+  WeatherSection({super.key});
+
+  int tempMax = 0;
+  int tempMin = 0;
+  int windSpeed = 0;
 
   String weatherCodeToName(int code) {
     switch (code) {
@@ -92,12 +99,31 @@ class WeatherSection extends StatelessWidget {
     }
   }
 
+  void convertUnits(Map selectedData) {
+    if (SettingsService().settings.temperatureUnit == TemperatureUnit.fahrenheit) {
+      tempMax = UnitConverter.celsiusToFahrenheit(selectedData['weatherData'].tempMax).round();
+      tempMin = UnitConverter.celsiusToFahrenheit(selectedData['weatherData'].tempMin).round();
+    } else {
+      tempMax = selectedData['weatherData'].tempMax.round();
+      tempMin = selectedData['weatherData'].tempMin.round();
+    }
+
+    if (SettingsService().settings.speedUnit == SpeedUnit.milesPerHour) {
+      windSpeed = UnitConverter.kilometersPerHourToMilesPerHour(selectedData['weatherData'].maxWind).round();
+    } else {
+      windSpeed = selectedData['weatherData'].maxWind.round();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return ValueListenableBuilder<Map?>(
         valueListenable: SelectedDataManager().selectedDataNotifier,
         builder: (context, selectedData, _) {
           if (selectedData != null) {
+            convertUnits(selectedData);
+
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Column(
@@ -126,9 +152,9 @@ class WeatherSection extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${selectedData['weatherData'].tempMax.round()}°C", style: Theme.of(context).textTheme.displaySmall,),
+                          Text("$tempMax°${SettingsService().settings.temperatureUnit}", style: Theme.of(context).textTheme.displaySmall,),
 
-                          Text("${selectedData['weatherData'].tempMin.round()}°C", style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),),
+                          Text("$tempMin°${SettingsService().settings.temperatureUnit}", style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),),
                         ],
                       ),
 
@@ -147,7 +173,7 @@ class WeatherSection extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Text("${selectedData['weatherData'].maxWind.round()} km/h", style: Theme.of(context).textTheme.titleMedium,),
+                              Text("$windSpeed ${SettingsService().settings.speedUnit}", style: Theme.of(context).textTheme.titleMedium,),
                               SizedBox(height: 4,),
                               Text("${selectedData['weatherData'].uvMax.round()}", style: Theme.of(context).textTheme.titleMedium),
                             ],

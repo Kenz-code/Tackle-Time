@@ -1,5 +1,5 @@
 import 'package:dart_suncalc/suncalc.dart';
-import 'package:fishing_calendar/utils/services/city_reader.dart';
+import 'package:tackle_time/utils/services/city_reader.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_data;
 

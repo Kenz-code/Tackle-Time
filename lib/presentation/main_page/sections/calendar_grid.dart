@@ -1,7 +1,7 @@
-import 'package:fishing_calendar/logic/main_page/daily_fish_activity.dart';
-import 'package:fishing_calendar/logic/main_page/moon_phase.dart';
-import 'package:fishing_calendar/logic/main_page/selected_data_manager.dart';
-import 'package:fishing_calendar/utils/constants/border_radius.dart';
+import 'package:tackle_time/logic/main_page/daily_fish_activity.dart';
+import 'package:tackle_time/logic/main_page/moon_phase.dart';
+import 'package:tackle_time/logic/main_page/selected_data_manager.dart';
+import 'package:tackle_time/utils/constants/border_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
