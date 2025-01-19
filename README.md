@@ -4,6 +4,10 @@ Plan your perfect fishing trip with our daily fishing calendar—discover the be
 
 ![](assets/readme/Screenshot.png)
 
+### Disclaimer
+
+This repository is made public strictly for viewing purposes, not for the reproduction of the code.
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
@@ -13,5 +17,3 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 - APIs used:
 	- [Astronomy Api](https://astronomyapi.com/ "Astronomy Api")
 	- [Open Meteo](https://open-meteo.com/ "Open Meteo")
-
-
