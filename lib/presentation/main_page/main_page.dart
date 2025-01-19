@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:tackle_time/presentation/main_page/sections/daily_activity_section.dart';
 import 'package:tackle_time/presentation/main_page/settings/settings_page.dart';
 import 'package:tackle_time/presentation/main_page/sections/weather_section.dart';
 import 'package:tackle_time/utils/services/city_reader.dart';
-import 'package:tackle_time/utils/services/network_tester.dart';
 import 'package:tackle_time/utils/services/settings/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:tackle_time/utils/services/saved_cities.dart';
@@ -31,6 +28,8 @@ class _MainPageState extends State<MainPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
 
+  List<Widget> content = [];
+
   @override
   void initState() {
     super.initState();
@@ -46,50 +45,26 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _scrollListener() {
-    setState(() {
-      _isScrolled = _scrollController.offset > 0;
-    });
+    if (!(_isScrolled == _scrollController.offset > 0)) {
+      setState(() {
+        _isScrolled = _scrollController.offset > 0;
+      });
+    }
   }
 
   Future<void> _loadInitialData() async {
-    // check for internet connection
-    final bool internetResult = await NetworkTester.checkInternetConnection();
-    if (internetResult == false) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("No connection"),
-          content: const Text("This app requires a internet connection"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                _loadInitialData();
-                Navigator.pop(context);
-              },
-              child: const Text("Retry"),
-            ),
+    final savedCities = await _savedCitiesManager.loadCities();
+    final selectedCity = await _savedCitiesManager.loadSelectedCity();
 
-            TextButton(
-              onPressed: () => exit(0),
-              child: const Text("Exit"),
-            ),
-          ],
-        ),
-      );
-    } else {
-      final savedCities = await _savedCitiesManager.loadCities();
-      final selectedCity = await _savedCitiesManager.loadSelectedCity();
+    final fishingData = await _fetchFishingData(selectedCity);
+    setState(() {
+      _savedCities = savedCities;
+      _selectedCity = selectedCity;
+      _fishingData = fishingData;
+    });
 
-      final fishingData = await _fetchFishingData(selectedCity);
-      setState(() {
-        _savedCities = savedCities;
-        _selectedCity = selectedCity;
-        _fishingData = fishingData;
-      });
-
-      // load settings
-      await SettingsService().loadSettings();
-    }
+    // load settings
+    await SettingsService().loadSettings();
   }
 
   Future<Map<String, dynamic>> _fetchFishingData(City city) async {
@@ -155,6 +130,20 @@ class _MainPageState extends State<MainPage> {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    content = [
+      if (_fishingData != null) CalendarGrid(_fishingData!),
+      Divider(height: 32),
+      if (_fishingData != null) DailyActivitySection(selectedCity: _selectedCity!,),
+      Divider(height: 32),
+      if (_fishingData != null) WeatherSection(),
+      Divider(height: 32,),
+      Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Center(child: Text("Copyright (c) 2025 KenboDev"))
+      ),
+      SizedBox(height: 16,),
+    ];
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -211,21 +200,10 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ),
-          ListView(
+          ListView.builder(
             controller: _scrollController,
-            children: [
-              if (_fishingData != null) CalendarGrid(_fishingData!),
-              Divider(height: 32),
-              if (_fishingData != null) DailyActivitySection(selectedCity: _selectedCity!,),
-              Divider(height: 32),
-              if (_fishingData != null) WeatherSection(),
-              Divider(height: 32,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Center(child: Text("Copyright (c) 2025 KenboDev"))
-              ),
-              SizedBox(height: 16,),
-            ],
+            itemCount: content.length,
+            itemBuilder: (context, index) => content[index]
           ),
         ],
       ),

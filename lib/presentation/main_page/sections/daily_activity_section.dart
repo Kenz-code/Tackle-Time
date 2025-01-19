@@ -132,7 +132,7 @@ class _TimelineBarState extends State<TimelineBar> {
   void initState() {
     super.initState();
     _currentTime = tz.TZDateTime.from(DateTime.now().toUtc(), tz.getLocation(widget.selectedCity.timeZoneId));
-    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+    _timer = Timer.periodic(Duration(seconds: 60), (_) {
       setState(() {
         _currentTime = tz.TZDateTime.from(DateTime.now().toUtc(), tz.getLocation(widget.selectedCity.timeZoneId));
       });
