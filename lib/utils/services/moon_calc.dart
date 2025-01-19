@@ -46,7 +46,7 @@ class MoonTimeCalculator {
     // Filter valid moonrise and moonset times that occur on or after the given UTC time
     final nextMoonrise = allMoonriseTz.firstWhere(
           (rise) => rise.day == selectedData["moonPhaseData"].date.day,
-      orElse: () => allMoonriseTz.isNotEmpty ? allMoonriseTz.first : tz.TZDateTime.now(location),
+      orElse: () => allMoonriseTz.isNotEmpty ? allMoonriseTz[1] : tz.TZDateTime.now(location),
     );
 
     final nextMoonset = allMoonsetTz.firstWhere(

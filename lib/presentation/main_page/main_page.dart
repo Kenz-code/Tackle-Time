@@ -27,9 +27,6 @@ class _MainPageState extends State<MainPage> {
 
   final ScrollController _scrollController = ScrollController();
   bool _isScrolled = false;
-
-  List<Widget> content = [];
-
   @override
   void initState() {
     super.initState();
@@ -61,6 +58,7 @@ class _MainPageState extends State<MainPage> {
       _savedCities = savedCities;
       _selectedCity = selectedCity;
       _fishingData = fishingData;
+      _scrollController.animateTo(0, duration: Duration.zero, curve: Curves.linear);
     });
 
     // load settings
@@ -130,20 +128,6 @@ class _MainPageState extends State<MainPage> {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    content = [
-      if (_fishingData != null) CalendarGrid(_fishingData!),
-      Divider(height: 32),
-      if (_fishingData != null) DailyActivitySection(selectedCity: _selectedCity!,),
-      Divider(height: 32),
-      if (_fishingData != null) WeatherSection(),
-      Divider(height: 32,),
-      Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Center(child: Text("Copyright (c) 2025 KenboDev"))
-      ),
-      SizedBox(height: 16,),
-    ];
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -200,10 +184,21 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ),
-          ListView.builder(
+          ListView(
             controller: _scrollController,
-            itemCount: content.length,
-            itemBuilder: (context, index) => content[index]
+            children: [
+              if (_fishingData != null) CalendarGrid(_fishingData!),
+              Divider(height: 32),
+              if (_fishingData != null) DailyActivitySection(selectedCity: _selectedCity!,),
+              Divider(height: 32),
+              if (_fishingData != null) WeatherSection(),
+              Divider(height: 32,),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Center(child: Text("Copyright (c) 2025 KenboDev"))
+              ),
+              SizedBox(height: 16,),
+            ],
           ),
         ],
       ),

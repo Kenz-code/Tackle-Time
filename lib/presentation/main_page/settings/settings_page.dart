@@ -1,3 +1,4 @@
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tackle_time/domain/onboarding_check.dart';
 import 'package:tackle_time/utils/constants/border_radius.dart';
 import 'package:tackle_time/utils/services/onboarding_service.dart';
@@ -18,11 +19,24 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool installPromptEnabled = false;
 
+  String versionNumber = '';
+
   @override
   void initState() {
     super.initState();
 
     installPromptEnabled = PWAInstall().installPromptEnabled;
+
+    // get version number
+    getVersionNumber();
+  }
+
+  Future<void> getVersionNumber() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    setState(() {
+      versionNumber = packageInfo.version;
+    });
   }
 
 
@@ -97,6 +111,10 @@ class _SettingsPageState extends State<SettingsPage> {
               PWAInstall().promptInstall_();
             },
           ) : SizedBox.shrink(),
+
+          ListTile(
+            title: Text("Version number: $versionNumber", style: Theme.of(context).textTheme.bodyMedium,),
+          ),
         ],
       ),
     );

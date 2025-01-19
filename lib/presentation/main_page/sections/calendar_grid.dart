@@ -150,14 +150,12 @@ class _CalendarGridDayState extends State<CalendarGridDay> {
   }
 
   void setCurrentDay() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      SelectedDataManager().updateSelectedDay(
-          {
-            'moonPhaseData': widget.data['moonPhaseData'][index],
-            "weatherData": widget.data["weatherData"][index]
-          }
-      );
-    });
+    SelectedDataManager().updateSelectedDay(
+        {
+          'moonPhaseData': widget.data['moonPhaseData'][index],
+          "weatherData": widget.data["weatherData"][index]
+        }
+    );
   }
 
   @override
@@ -165,7 +163,7 @@ class _CalendarGridDayState extends State<CalendarGridDay> {
     super.initState();
 
     if (isDateToday()) {
-      setCurrentDay();
+      WidgetsBinding.instance.addPostFrameCallback((_) => setCurrentDay());
     }
   }
 
@@ -204,12 +202,7 @@ class _CalendarGridDayState extends State<CalendarGridDay> {
 
     return GestureDetector(
       onTap: hasData ? () {
-        SelectedDataManager().updateSelectedDay(
-            {
-              'moonPhaseData': widget.data['moonPhaseData'][index],
-              "weatherData": widget.data["weatherData"][index]
-            }
-        );
+        setCurrentDay();
 
         HapticFeedback.lightImpact();
       } : () {},
