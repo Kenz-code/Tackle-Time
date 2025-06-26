@@ -19,24 +19,13 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool installPromptEnabled = false;
 
-  String versionNumber = '';
+  String versionNumber = '1.0.2';
 
   @override
   void initState() {
     super.initState();
 
     installPromptEnabled = PWAInstall().installPromptEnabled;
-
-    // get version number
-    getVersionNumber();
-  }
-
-  Future<void> getVersionNumber() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-    setState(() {
-      versionNumber = packageInfo.version;
-    });
   }
 
 
